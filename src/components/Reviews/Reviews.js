@@ -1,29 +1,32 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import FetchMovieReviewsAPI from '../../services/FetchMovieReviewsAPI';
+import { ReviewsList, ReviewsItem } from './Reviews.styled';
 
 export default function Cast() {
-  const { id } = useParams();
-  const [reviews, setReviews] = useState(null);
+  const { movieId } = useParams();
+  const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    FetchMovieReviewsAPI(id).then(data => setReviews(data.results));
-  }, [id]);
+    FetchMovieReviewsAPI(movieId).then(data => setReviews(data.results));
+  }, [movieId]);
 
+  console.log(reviews);
   return (
-    <ul>
-      {reviews ? (
+    <ReviewsList>
+      {reviews &&
         reviews.map(r => {
           return (
-            <li key={r.author}>
+            <ReviewsItem key={r.author}>
               <h3>Author: {r.author}</h3>
               <p>{r.content}</p>
-            </li>
+            </ReviewsItem>
           );
-        })
-      ) : (
-        <li>We don't have any reviews for this movie</li>
+        })}
+
+      {reviews.length === 0 && (
+        <ReviewsItem>We don't have any reviews for this movie</ReviewsItem>
       )}
-    </ul>
+    </ReviewsList>
   );
 }
