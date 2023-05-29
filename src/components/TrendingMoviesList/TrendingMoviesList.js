@@ -6,8 +6,6 @@ export default function TrendingMoviesList() {
   const [movies, setMovies] = useState([]);
   const location = useLocation();
 
-  console.log('hello')
-
   useEffect(() => {
     FetchTrendingMoviesAPI().then(data => setMovies(data.results));
   }, []);
